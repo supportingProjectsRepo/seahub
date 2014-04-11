@@ -776,7 +776,7 @@ class UploadLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_httpserver_access_token(
+        token = seafile_api.get_fileserver_access_token(
             repo_id, 'dummy', 'upload', request.user.username)
         url = gen_file_upload_url(token, 'upload-api')
         return Response(url)
@@ -793,7 +793,7 @@ class UpdateLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_httpserver_access_token(
+        token = seafile_api.get_fileserver_access_token(
             repo_id, 'dummy', 'update', request.user.username)
         url = gen_file_upload_url(token, 'update-api')
         return Response(url)
@@ -810,7 +810,7 @@ class UploadBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_httpserver_access_token(
+        token = seafile_api.get_fileserver_access_token(
             repo_id, 'dummy', 'upload-blks', request.user.username)
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
@@ -827,7 +827,7 @@ class UpdateBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_httpserver_access_token(
+        token = seafile_api.get_fileserver_access_token(
             repo_id, 'dummy', 'update-blks', request.user.username)
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
@@ -902,7 +902,7 @@ def get_shared_link(request, repo_id, path):
 
 def get_repo_file(request, repo_id, file_id, file_name, op):
     if op == 'download':
-        token = seafile_api.get_httpserver_access_token(repo_id, file_id, op,
+        token = seafile_api.get_fileserver_access_token(repo_id, file_id, op,
                                                         request.user.username)
         redirect_url = gen_file_get_url(token, file_name)
         response = HttpResponse(json.dumps(redirect_url), status=200,
@@ -926,7 +926,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
             repo = get_repo(repo_id)
             encrypted = repo.encrypted
             enc_version = repo.enc_version
-        token = seafile_api.get_httpserver_access_token(
+        token = seafile_api.get_fileserver_access_token(
             repo_id, file_id, op, request.user.username)
         url = gen_block_get_url(token, None)
         res = {
@@ -2833,7 +2833,7 @@ def html_get_group_discussion(request, msg_id):
                 if not att.obj_id:
                     att.err = 'File does not exist'
                 else:
-                    att.token = seafile_api.get_httpserver_access_token(
+                    att.token = seafile_api.get_fileserver_access_token(
                         att.repo_id, att.obj_id, 'view', request.user.username)
                     att.img_url = gen_file_get_url(att.token, att.name)
 

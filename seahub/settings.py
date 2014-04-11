@@ -7,7 +7,7 @@ import re
 import random
 import string
 
-from seaserv import HTTP_SERVER_ROOT, HTTP_SERVER_PORT, HTTP_SERVER_HTTPS
+from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
@@ -491,8 +491,11 @@ if 'win32' in sys.platform:
 # other settings files.
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
-if HTTP_SERVER_HTTPS:
-    INNER_HTTP_SERVER_ROOT = 'https://127.0.0.1:' + HTTP_SERVER_PORT
-else:
-    INNER_HTTP_SERVER_ROOT = 'http://127.0.0.1:' + HTTP_SERVER_PORT
-    
+def fix_fileserver_config():
+    if 'HTTP_SERVER_ROOT' in globals():
+        global FILE_SERVER_ROOT, HTTP_SERVER_ROOT
+        FILE_SERVER_ROOT = HTTP_SERVER_ROOT
+        del HTTP_SERVER_ROOT
+fix_fileserver_config()
+
+INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
